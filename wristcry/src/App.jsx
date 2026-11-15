@@ -269,8 +269,6 @@ export default function App() {
       className="background flex flex-col justify-between min-h-screen pb-32 relative font-comic"
     >
 
-
-
       {/* Header with massive mouse image and huge yellow title */}
       <header className="header flex justify-between items-center w-full p-4 z-25 font-comic">
         <div className="flex items-center gap-6">
@@ -315,6 +313,9 @@ export default function App() {
 
         {/* Main Content */}
         <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center pb-12">
+        
+          {/* chinese gif */}
+          <img src="../public/images/gif1.gif" className="w-56 h-20 md:w-72"/>
 
           {/* Title */}
           <h2 className="text-3xl md:text-5xl font-black text-center text-yellow-300 font-comic">
@@ -357,7 +358,7 @@ export default function App() {
 
         </main>
       </div>
-
+      
       {/* FDA.webp positioned near the bottom right (bigger, no drop shadow) */}
       <div className="absolute bottom-16 right-4 z-20 pointer-events-none hidden md:block">
         <img 
