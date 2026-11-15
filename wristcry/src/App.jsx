@@ -43,6 +43,9 @@ export default function App() {
     Math.floor(Math.random() * 30) + 10
   );
 
+  // button location state
+  const [hasMoved, setHasMoved] = useState(false);
+
   // Leaderboard state with requested names
   const [leaderboard, setLeaderboard] = useState([
     { id: 1, name: "osamason", score: 1000000 },
@@ -175,7 +178,8 @@ export default function App() {
       }
     }
 
-    // Scatter BOTH buttons around the screen
+    setHasMoved(true);
+
     setButtonPositions({
       click: getRandomPosition(clickBtnRef),
       reset: getRandomPosition(resetBtnRef)
@@ -232,10 +236,7 @@ export default function App() {
       className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
     >
 
-      {/* Action Area */}
-      <div className="flex items-center gap-4 my-1">
-        {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
-      </div>
+
 
       {/* Header with massive mouse image and huge yellow title */}
       <header className="header flex justify-between items-center w-full p-4 z-25 font-comic">
@@ -280,7 +281,7 @@ export default function App() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center z-10 pb-12">
+        <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center pb-12">
 
           {/* Title */}
           <h2 className="text-3xl md:text-5xl font-black text-center text-yellow-300 font-comic">
@@ -297,8 +298,12 @@ export default function App() {
           {/* Subtitle */}
           <p className="text-base md:text-lg font-bold tracking-wider text-yellow-300 font-comic max-w-xl">
             {isChinese ? "点击以提升关注度" : "CLICK TO RAISE AWARENESS"}
-            
           </p>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-center gap-4 mt-4 z-100">
+            {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
+          </div>
 
           {/* Separated Total Count Display Window */}
           <div className="flex flex-col items-center bg-white text-black px-6 py-2">
