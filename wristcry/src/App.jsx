@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import MusicPlayer from "./components/MusicPlayer";
 import { useState, useEffect, useRef } from 'react'
 import { IoGlobeOutline, IoWarning } from "react-icons/io5";
-import { howl } from "howler";
+import { Howl } from "howler";
 
 import './App.css'
 
@@ -69,28 +69,28 @@ export default function App() {
   }, []);
 
   // Global document-wide click tracker for the 6-click crash warning
-const handleGlobalClick = (e) => {
-  // Don't count clicks inside the warning popup
-  if (e.target.closest(".crash-warning")) return;
+  const handleGlobalClick = (e) => {
+    // Don't count clicks inside the warning popup
+    if (e.target.closest(".crash-warning")) return;
 
-  globalClickCountRef.current += 1;
+    globalClickCountRef.current += 1;
 
-  if (globalClickCountRef.current % 6 === 0) {
-    setShowCrashWarning(true);
+    if (globalClickCountRef.current % 6 === 0) {
+      setShowCrashWarning(true);
 
-    const crash = audioRef.current;
+      const crash = audioRef.current;
 
-    if (crash) {
-      crash.stop();
+      if (crash) {
+        crash.stop();
 
-      // 30% chance to play at 2x speed
-      const playFast = Math.random() < 0.3;
+        // 30% chance to play at 2x speed
+        const playFast = Math.random() < 0.3;
 
-      crash.rate(playFast ? 2 : 1);
-      crash.play();
+        crash.rate(playFast ? 2 : 1);
+        crash.play();
+      }
     }
-  }
-};
+  };
 
   const handleClick = () => {
     const nextCount = count + 1
@@ -151,22 +151,23 @@ const handleGlobalClick = (e) => {
       className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
     >
 
-      {/* Header with Logo */}
+      {/* Header with massive mouse image and huge yellow title */}
       <header className="header flex justify-between items-center w-full p-4 z-25 font-comic">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-6">
           <img 
-            src="/logo.png" 
-            alt="Wristcry Logo" 
-            className="w-12 h-12 object-cover shadow-[2px_2px_0px_black]" 
+            src="/images/mouse.webp" 
+            alt="Mouse Icon" 
+            className="w-36 h-36 md:w-48 md:h-48 object-contain" 
           />
-          <h1 className="text-5xl font-black italic">
+          <h1 className="text-7xl md:text-9xl font-black italic text-yellow-300 tracking-wider">
             WRISTCRY
           </h1>
         </div>
       </header>
 
+      {/* Music player with autoPlay prop enabled */}
       <div className='music-player w-full'>
-          <MusicPlayer/>
+          <MusicPlayer autoPlay={true} />
       </div>
 
       {/* Content Layout Wrapper (Sidebar + Main) preventing overlap */}
@@ -238,9 +239,17 @@ const handleGlobalClick = (e) => {
         </main>
       </div>
 
+      {/* FDA.webp positioned near the bottom right (bigger, no drop shadow) */}
+      <div className="absolute bottom-16 right-4 z-20 pointer-events-none hidden md:block">
+        <img 
+          src="/images/FDA.webp" 
+          alt="FDA Stamp" 
+          className="w-56 h-56 md:w-72 md:h-72 object-contain rotate-12 opacity-95 shadow-none" 
+        />
+      </div>
+
       {/* Carpal Tunnel Crash Warning Popup */}
       {showCrashWarning && (
-        
         <div className="crash-warning fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white text-black p-8 md:p-10 max-w-2xl w-full flex flex-col gap-6 relative">
             
