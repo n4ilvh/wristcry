@@ -28,103 +28,149 @@ function MusicPlayer() {
   const [status, setStatus] = useState("AUDIO SYSTEM READY");
   const [muteClicks, setMuteClicks] = useState(0);
 
-  const soundRef = useRef(null);
-  const shouldPlayRef = useRef(false);
+  
+const soundRef = useRef(null);
+const shouldPlayRef = useRef(false);
+const crashSoundRef = useRef(null);
 
-  const currentTrack = tracks[trackIndex];
+const MAX_MUTE_USES = 3;
+const CRASH_CHANCE = 0.30;
 
-  useEffect(() => {
-    const sound = new Howl({
-      src: [currentTrack.src],
-      volume: volume,
-      html5: true,
+const currentTrack = tracks[trackIndex];
 
-      onplay: () => {
-        setIsPlaying(true);
-        setStatus("NOW PLAYING");
-      },
+// Initialize crash sound
+useEffect(() => {
+  const crash = new Howl({
+    src: ["/audio/soundeffect.mp3"],
+    volume: 0.8,
+    html5: true,
+  });
 
-      onpause: () => {
-        setIsPlaying(false);
-        setStatus("PLAYBACK PAUSED");
-      },
+  crashSoundRef.current = crash;
 
-      onend: () => {
-        setTrackIndex((prev) => (prev + 1) % tracks.length);
-      },
+  return () => {
+    crash.unload();
+  };
+}, []);
 
-      onloaderror: () => {
-        setStatus("ERROR: TRACK NOT FOUND");
-      },
+// Initialize music whenever track changes
+useEffect(() => {
+  const sound = new Howl({
+    src: [currentTrack.src],
+    volume: volume,
+    html5: true,
 
-      onplayerror: () => {
-        setStatus("ERROR: CANNOT PLAY TRACK");
-      },
-    });
+    onplay: () => {
+      setIsPlaying(true);
+      setStatus("NOW PLAYING");
+    },
 
-    soundRef.current = sound;
+    onpause: () => {
+      setIsPlaying(false);
+    },
 
-    if (shouldPlayRef.current) {
-      sound.play();
+    onend: () => {
+      setTrackIndex((prev) => (prev + 1) % tracks.length);
+    },
+
+    onloaderror: () => {
+      setStatus("ERROR: TRACK NOT FOUND");
+    },
+
+    onplayerror: () => {
+      setStatus("ERROR: CANNOT PLAY TRACK");
+    },
+  });
+
+  soundRef.current = sound;
+
+  if (shouldPlayRef.current) {
+    sound.play();
+  }
+
+  return () => {
+    sound.unload();
+  };
+}, [trackIndex]);
+
+// Update volume
+useEffect(() => {
+  soundRef.current?.volume(volume);
+}, [volume]);
+
+// Random crash mechanic
+const maybeCrash = () => {
+  if (Math.random() < CRASH_CHANCE) {
+    crashSoundRef.current?.play();
+
+    setStatus("FATAL ERROR: YOUR WRISTS HAVE BETRAYED YOU");
+
+    if (Math.random() < 0.5) {
+      shouldPlayRef.current = false;
+      soundRef.current?.pause();
+      setStatus("SYSTEM FAILURE: MUSIC PRIVILEGES REVOKED");
     }
+  }
+};
 
-    return () => {
-      sound.unload();
-    };
-  }, [trackIndex]);
+// Player controls
+const playMusic = () => {
+  if (soundRef.current) {
+    shouldPlayRef.current = true;
+    soundRef.current.play();
+  }
+};
 
-  useEffect(() => {
-    if (soundRef.current) {
-      soundRef.current.volume(volume);
-    }
-  }, [volume]);
+const pauseMusic = () => {
+  shouldPlayRef.current = false;
+  soundRef.current?.pause();
+  setStatus("PLAYBACK PAUSED");
+  maybeCrash();
+};
 
-  const playMusic = () => {
-    if (soundRef.current) {
-      shouldPlayRef.current = true;
-      soundRef.current.play();
-    }
-  };
+const nextTrack = () => {
+  setTrackIndex((prev) => (prev + 1) % tracks.length);
+  setStatus("SKIP REQUESTED. UNDER INVESTIGATION.");
+  maybeCrash();
+};
 
-  const pauseMusic = () => {
-    shouldPlayRef.current = false;
-    soundRef.current?.pause();
-  };
+const previousTrack = () => {
+  setTrackIndex((prev) =>
+    (prev - 1 + tracks.length) % tracks.length
+  );
+  setStatus("TIME TRAVEL IS NOT SUPPORTED.");
+  maybeCrash();
+};
 
-  const nextTrack = () => {
-    setTrackIndex((prev) => (prev + 1) % tracks.length);
-  };
+const handleMute = () => {
+  if (muteClicks >= MAX_MUTE_USES) return;
 
-  const previousTrack = () => {
-    setTrackIndex((prev) =>
-      (prev - 1 + tracks.length) % tracks.length
-    );
-  };
+  setMuteClicks((prev) => prev + 1);
 
-  const handleMute = () => {
-    const random = Math.random();
-    setMuteClicks((prev) => prev + 1);
+  const random = Math.random();
 
-    if (random < 0.40) {
-      soundRef.current?.mute(true);
-      setIsMuted(true);
-      setStatus("AUDIO MUTED SUCCESSFULLY");
-    } else if (random < 0.65) {
-      soundRef.current?.mute(false);
-      setIsMuted(false);
-      setStatus("AUDIO RESTORED");
-    } else if (random < 0.85) {
-      setStatus("ERROR 404: SILENCE NOT FOUND");
-    } else {
-      const randomVolume = Math.random();
-      setVolume(randomVolume);
+  if (random < 0.40) {
+    soundRef.current?.mute(true);
+    setIsMuted(true);
+    setStatus("AUDIO MUTED SUCCESSFULLY");
+  } else if (random < 0.65) {
+    soundRef.current?.mute(false);
+    setIsMuted(false);
+    setStatus("AUDIO RESTORED");
+  } else if (random < 0.85) {
+    setStatus("ERROR 404: SILENCE NOT FOUND");
+  } else {
+    const randomVolume = Math.random();
+    setVolume(randomVolume);
+    soundRef.current?.mute(false);
+    setIsMuted(false);
+    setStatus("VOLUME CONTROL COMPROMISED");
+  }
 
-      soundRef.current?.mute(false);
-      setIsMuted(false);
+  maybeCrash();
+};
 
-      setStatus("VOLUME CONTROL COMPROMISED");
-    }
-  };
+
 
   return (
     <div className="w-full bg-[#ff0000] p-2 font-serif">
@@ -198,10 +244,19 @@ function MusicPlayer() {
 
               <button
                 onClick={handleMute}
-                className="bg-[#0000cc] border-2 border-black px-3 py-2 text-sm text-white font-bold hover:bg-[#000099] active:translate-y-1"
-              >
-                {isMuted ? "UNMUTE??" : "MUTE??"}
-              </button>
+                disabled={muteClicks >= MAX_MUTE_USES}
+                className={`border-2 border-black px-3 py-2 text-sm font-bold active:translate-y-1 ${
+                    muteClicks >= MAX_MUTE_USES
+                    ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    : "bg-[#0000cc] text-white hover:bg-[#000099]"
+                }`}
+                >
+                {muteClicks >= MAX_MUTE_USES
+                    ? "MUTE DISABLED"
+                    : isMuted
+                    ? "UNMUTE??"
+                    : "MUTE??"}
+            </button>
 
             </div>
 
