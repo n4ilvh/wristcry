@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from "motion/react";
-import { IoVolumeMuteSharp } from "react-icons/io5";
+import { IoVolumeMuteSharp, IoVolumeHigh, IoPause, IoPlay } from "react-icons/io5";
+import MusicPlayer from "./components/MusicPlayer";
 
 import './App.css'
 
@@ -27,7 +28,7 @@ function App() {
           WRISTCRY
         </h1>
         <div className='music-player'>
-          <IoVolumeMuteSharp/>
+          <MusicPlayer/>
         </div>
       
       </header>

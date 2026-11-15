@@ -9,5 +9,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: blue;
+}
+
+.music-player {
+  background-color: green;
+  display: flex;
+  font-size: 2rem;
 }
