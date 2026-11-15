@@ -5,5 +5,9 @@
   @apply min-h-screen text-black p-8;
 }
 
-.title {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: blue;
 }

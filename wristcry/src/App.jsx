@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { motion } from "motion/react";
+import { IoVolumeMuteSharp } from "react-icons/io5";
+
 import './App.css'
 
 function ClickButton() {
@@ -20,11 +22,14 @@ function App() {
     <div className="background">
 
       {/* Header */}
-      <header className="flex justify-between items-center">
+      <header className="header">
         <h1 className="text-5xl font-black italic">
           WRISTCRY
         </h1>
-
+        <div className='music-player'>
+          <IoVolumeMuteSharp/>
+        </div>
+      
       </header>
 
       {/* Main content */}
