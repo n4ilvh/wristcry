@@ -9,7 +9,10 @@ import './App.css'
 
 export default function App() {
   const [count, setCount] = useState(0)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [buttonPositions, setButtonPositions] = useState({
+    click: null,
+    reset: null
+  });
 
   // Button swapping state
   const [clicksUntilSwap, setClicksUntilSwap] = useState(Math.floor(Math.random() * 3) + 3)
@@ -132,27 +135,52 @@ export default function App() {
     };
   }
 
+  const clickBtnRef = useRef(null);
+  const resetBtnRef = useRef(null);
+
+  const getRandomPosition = (buttonRef) => {
+    const button = buttonRef.current;
+    if (!button) return { x: 100, y: 200 };
+
+    const width = button.offsetWidth;
+    const height = button.offsetHeight;
+
+    const minX = 10;
+    const maxX = window.innerWidth - width - 10;
+
+    // Keep buttons below the header and above the bottom banner
+    const minY = 150;
+    const maxY = window.innerHeight - height - 100;
+
+    return {
+      x: Math.random() * Math.max(0, maxX - minX) + minX,
+      y: Math.random() * Math.max(0, maxY - minY) + minY
+    };
+  };
+
   const handleClick = () => {
-    const nextCount = count + 1
-    setCount(nextCount)
+    const nextCount = count + 1;
+    setCount(nextCount);
 
     if (isSwapped) {
-      setIsSwapped(false)
+      setIsSwapped(false);
     } else {
-      const remaining = clicksUntilSwap - 1
+      const remaining = clicksUntilSwap - 1;
+
       if (remaining <= 0) {
-        setIsSwapped(true)
-        setClicksUntilSwap(Math.floor(Math.random() * 3) + 3)
+        setIsSwapped(true);
+        setClicksUntilSwap(Math.floor(Math.random() * 3) + 3);
       } else {
-        setClicksUntilSwap(remaining)
-        setIsSwapped(false)
+        setClicksUntilSwap(remaining);
       }
     }
 
-    const randomX = (Math.random() - 0.5) * 80
-    const randomY = (Math.random() - 0.5) * 30
-    setPosition({ x: randomX, y: randomY })
-  }
+    // Scatter BOTH buttons around the screen
+    setButtonPositions({
+      click: getRandomPosition(clickBtnRef),
+      reset: getRandomPosition(resetBtnRef)
+    });
+  };
 
   const getSillyCountDisplay = (c) => {
     if (c === 0) return "0";
@@ -165,31 +193,49 @@ export default function App() {
   const clickBtn = (
     <button
       key="click-btn"
+      ref={clickBtnRef}
       onClick={handleClick}
-      className="bg-yellow-300 text-white text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-none"
+      style={buttonPositions.click ? {
+        position: "fixed",
+        left: buttonPositions.click.x,
+        top: buttonPositions.click.y,
+        zIndex: 100,
+      } : {}}
+      className="bg-yellow-300 text-white text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 transition-all duration-150"
     >
       {isChinese ? "点击我" : "CLICK ME"}
     </button>
-  )
-
+  );
   const resetBtn = (
     <button
       key="reset-btn"
+      ref={resetBtnRef}
       onClick={() => {
-        setIsSwapped(false)
-        setShowModal(true)
+        setIsSwapped(false);
+        setShowModal(true);
       }}
-      className="bg-yellow-300 text-red-600 text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-none"
+      style={buttonPositions.reset ? {
+        position: "fixed",
+        left: buttonPositions.reset.x,
+        top: buttonPositions.reset.y,
+        zIndex: 100,
+      } : {}}
+      className="bg-yellow-300 text-red-600 text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 transition-all duration-150"
     >
       {isChinese ? "重置" : "RESET"}
     </button>
-  )
+  );
 
   return (
     <div 
       onClick={handleGlobalClick}
       className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
     >
+
+      {/* Action Area */}
+      <div className="flex items-center gap-4 my-1">
+        {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
+      </div>
 
       {/* Header with massive mouse image and huge yellow title */}
       <header className="header flex justify-between items-center w-full p-4 z-25 font-comic">
@@ -262,16 +308,6 @@ export default function App() {
             </span>
           </div>
 
-          {/* Action Area */}
-          <div
-            style={{
-              transform: `translate(${position.x}px, ${position.y}px)`,
-            }}
-            className="flex items-center gap-4 transition-transform duration-75 my-1"
-          >
-            {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
-          </div>
-
           {/* Global Metric Counter */}
           <div className="flex flex-col items-center bg-white text-black px-6 py-2">
             <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500">Global Metric</span>
@@ -295,7 +331,7 @@ export default function App() {
 
       {/* Carpal Tunnel Crash Warning Popup */}
       {showCrashWarning && (
-        <div className="crash-warning fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-sans">
+        <div className="crash-warning fixed inset-0 bg-red-600/90 flex items-center justify-center z-500 p-4 font-sans">
           <div className="bg-white text-black p-8 md:p-10 max-w-2xl w-full flex flex-col gap-6 relative">
             
             {/* Pixelated Top-Left X Close Button */}
