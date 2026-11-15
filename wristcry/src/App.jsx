@@ -364,7 +364,7 @@ export default function App() {
         <img 
           src="/images/FDA.webp" 
           alt="FDA Stamp" 
-          className="w-56 h-56 md:w-72 md:h-72 object-contain rotate-12 opacity-95 shadow-none" 
+          className="w-56 h-56 md:w-72 md:h-72 object-contain rotate-12 opacity-95 shadow-none animate-[spin_4s_linear_infinite]" 
         />
       </div>
 
