@@ -246,7 +246,7 @@ export default function App() {
             alt="Mouse Icon" 
             className="w-36 h-36 md:w-48 md:h-48 object-contain" 
           />
-          <h1 className="text-5xl font-black italic">
+          <h1 className="text-8xl text-yellow-300 italic">
             {isChinese ? "手腕哭泣" : "WRIST CRY"}
           </h1>
         </div>
