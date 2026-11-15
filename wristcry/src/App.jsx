@@ -48,11 +48,11 @@ export default function App() {
 
   // Leaderboard state with requested names
   const [leaderboard, setLeaderboard] = useState([
-    { id: 1, name: "osamason", score: 1000000 },
-    { id: 2, name: "nettspend", score: 847293 },
-    { id: 3, name: "2slimey", score: 304928 },
-    { id: 4, name: "fakemink", score: 10784 },
-    { id: 5, name: "ecco2k", score: 1938 },
+    { id: 1, name: "osamason", score: 100384 },
+    { id: 2, name: "nettspend", score: 78394 },
+    { id: 3, name: "2slimey", score: 13928 },
+    { id: 4, name: "fakemink", score: 1234 },
+    { id: 5, name: "ecco2k", score: 578 },
     { id: 6, name: "che", score: 134 },
     { id: 7, name: "homixide poopoo", score: 67 },
   ])
@@ -61,14 +61,22 @@ export default function App() {
     const timer = setInterval(() => {
       setLivesSaved(prev => prev + Math.floor(Math.random() * 45) + 5)
       setLeaderboard(prev =>
-        prev.map(player => {
-          if (Math.random() > 0.4) {
-            return { ...player, score: player.score + Math.floor(Math.random() * 1500) + 100 }
+        prev.map((player, index) => {
+          if (index < 4) {
+            // Higher scores increment by roughly 20
+            if (Math.random() > 0.5) {
+              return { ...player, score: player.score + 20 }
+            }
+          } else {
+            // Lower scores increment by 5 to 10
+            if (Math.random() > 0.4) {
+              return { ...player, score: player.score + Math.floor(Math.random() * 6) + 5 }
+            }
           }
           return player
         }).sort((a, b) => b.score - a.score)
       )
-    }, 1200)
+    }, 3000)
 
     return () => clearInterval(timer)
   }, [])
@@ -188,8 +196,11 @@ export default function App() {
 
   const getSillyCountDisplay = (c) => {
     if (c === 0) return "0";
+    if (c % 3 === 0) {
+      return `ln(e^${c})`;
+    }
     if (c % 5 === 0) {
-      return `ln(e^${c}) [base-e override]`;
+      return `e^(ln(${c}))`;
     }
     return c;
   };
