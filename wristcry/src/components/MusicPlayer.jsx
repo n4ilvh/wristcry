@@ -28,7 +28,6 @@ function MusicPlayer() {
 
   const currentTrack = tracks[trackIndex];
 
-  // Create audio instance when track changes
   useEffect(() => {
     const sound = new Howl({
       src: [currentTrack.src],
@@ -69,14 +68,12 @@ function MusicPlayer() {
     };
   }, [trackIndex]);
 
-  // Update volume
   useEffect(() => {
     if (soundRef.current) {
       soundRef.current.volume(volume);
     }
   }, [volume]);
 
-  // Play
   const playMusic = () => {
     if (soundRef.current) {
       shouldPlayRef.current = true;
@@ -84,53 +81,36 @@ function MusicPlayer() {
     }
   };
 
-  // Pause
   const pauseMusic = () => {
     shouldPlayRef.current = false;
-
-    if (soundRef.current) {
-      soundRef.current.pause();
-    }
+    soundRef.current?.pause();
   };
 
-  // Next track
   const nextTrack = () => {
     setTrackIndex((prev) => (prev + 1) % tracks.length);
   };
 
-  // Previous track
   const previousTrack = () => {
     setTrackIndex((prev) =>
       (prev - 1 + tracks.length) % tracks.length
     );
   };
 
-  // Randomly malfunctioning mute button
   const handleMute = () => {
     const random = Math.random();
     setMuteClicks((prev) => prev + 1);
 
     if (random < 0.40) {
-      // 40%: Successfully mute
       soundRef.current?.mute(true);
       setIsMuted(true);
       setStatus("AUDIO MUTED SUCCESSFULLY");
-    } 
-    
-    else if (random < 0.65) {
-      // 25%: Successfully unmute
+    } else if (random < 0.65) {
       soundRef.current?.mute(false);
       setIsMuted(false);
       setStatus("AUDIO RESTORED");
-    } 
-    
-    else if (random < 0.85) {
-      // 20%: Refuse to work
+    } else if (random < 0.85) {
       setStatus("ERROR 404: SILENCE NOT FOUND");
-    } 
-    
-    else {
-      // 15%: Randomly change volume
+    } else {
       const randomVolume = Math.random();
       setVolume(randomVolume);
 
@@ -144,111 +124,124 @@ function MusicPlayer() {
   return (
     <div className="w-full bg-[#ff0000] p-2 font-serif">
 
-      {/* Main music panel */}
-      <div className="border-[5px] border-[#ff00ff] bg-[#ffff00] p-3">
+      {/* Main player container */}
+      <div className="border-[5px] border-[#ff00ff] bg-[#ffff00] p-2 md:p-3">
 
         {/* Header */}
-        <div className="border-b-[4px] border-[#ff00ff] pb-2 mb-3">
-          <h2 className="text-4xl font-bold italic text-[#ff0000] underline">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b-[3px] border-[#ff00ff] pb-2 mb-2">
+
+          <h2 className="text-2xl md:text-3xl font-bold italic text-[#ff0000] underline">
             ★ WRIST FM ★
           </h2>
 
-          <p className="text-sm font-bold text-[#0000cc]">
+          <p className="text-xs font-bold text-[#0000cc]">
             THE OFFICIAL CARPAL TUNNEL RADIO STATION
           </p>
-        </div>
-
-        {/* Current track */}
-        <div className="mb-4">
-          <p className="text-sm font-bold text-[#0000cc] underline">
-            NOW PLAYING:
-          </p>
-
-          <h3 className="text-3xl font-bold text-black">
-            {currentTrack.title}
-          </h3>
-
-          <p className="text-lg italic text-[#0000cc]">
-            by {currentTrack.artist}
-          </p>
-
-          <p className="text-xs text-[#ff0000] font-bold mt-2">
-            TRACK {trackIndex + 1} OF {tracks.length}
-          </p>
-        </div>
-
-        {/* Media controls */}
-        <div className="flex flex-wrap gap-2 justify-center mb-4">
-
-          <button
-            onClick={previousTrack}
-            className="bg-[#ff0000] border-2 border-black px-3 py-2 text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
-          >
-            |◀ PREV
-          </button>
-
-          <button
-            onClick={isPlaying ? pauseMusic : playMusic}
-            className="bg-[#ff0000] border-2 border-black px-5 py-2 text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
-          >
-            {isPlaying ? "Ⅱ PAUSE" : "▶ PLAY"}
-          </button>
-
-          <button
-            onClick={nextTrack}
-            className="bg-[#ff0000] border-2 border-black px-3 py-2 text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
-          >
-            NEXT ▶|
-          </button>
-
-          <button
-            onClick={handleMute}
-            className="bg-[#0000cc] border-2 border-black px-3 py-2 text-white font-bold hover:bg-[#000099] active:translate-y-1"
-          >
-            {isMuted ? "UNMUTE??" : "MUTE??"}
-          </button>
 
         </div>
 
-        {/* Volume */}
-        <div className="border-t-[3px] border-[#ff00ff] pt-3">
+        {/* Track information + controls in same row */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
 
-          <div className="flex justify-between text-sm font-bold text-[#0000cc]">
-            <label>VOLUME CONTROL:</label>
-            <span>{Math.round(volume * 100)}%</span>
+          {/* Track information */}
+          <div className="flex-1 min-w-0">
+
+            <p className="text-xs font-bold text-[#0000cc] underline">
+              NOW PLAYING:
+            </p>
+
+            <h3 className="text-2xl md:text-3xl font-bold text-black truncate">
+              {currentTrack.title}
+            </h3>
+
+            <p className="text-sm italic text-[#0000cc]">
+              by {currentTrack.artist}
+            </p>
+
+            <p className="text-xs text-[#ff0000] font-bold mt-1">
+              TRACK {trackIndex + 1} OF {tracks.length}
+            </p>
+
           </div>
 
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={(e) => setVolume(Number(e.target.value))}
-            className="w-full accent-[#ff0000] cursor-pointer"
-          />
+          {/* Controls + volume */}
+          <div className="flex-1 min-w-0 flex flex-col gap-2">
+
+            {/* Media controls */}
+            <div className="flex flex-wrap gap-1 justify-start sm:justify-end">
+
+              <button
+                onClick={previousTrack}
+                className="bg-[#ff0000] border-2 border-black px-2 py-2 text-sm text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
+              >
+                |◀ PREV
+              </button>
+
+              <button
+                onClick={isPlaying ? pauseMusic : playMusic}
+                className="bg-[#ff0000] border-2 border-black px-3 py-2 text-sm text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
+              >
+                {isPlaying ? "Ⅱ PAUSE" : "▶ PLAY"}
+              </button>
+
+              <button
+                onClick={nextTrack}
+                className="bg-[#ff0000] border-2 border-black px-2 py-2 text-sm text-[#ffff00] font-bold hover:bg-[#cc0000] active:translate-y-1"
+              >
+                NEXT ▶|
+              </button>
+
+              <button
+                onClick={handleMute}
+                className="bg-[#0000cc] border-2 border-black px-3 py-2 text-sm text-white font-bold hover:bg-[#000099] active:translate-y-1"
+              >
+                {isMuted ? "UNMUTE??" : "MUTE??"}
+              </button>
+
+            </div>
+
+            {/* Volume */}
+            <div>
+
+              <div className="flex justify-between text-xs font-bold text-[#0000cc]">
+                <label>VOLUME CONTROL:</label>
+                <span>{Math.round(volume * 100)}%</span>
+              </div>
+
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="w-full h-3 accent-[#ff0000] cursor-pointer"
+              />
+
+            </div>
+
+          </div>
 
         </div>
 
-        {/* Status */}
-        <div className="bg-[#ff0000] border-2 border-black p-2 mt-3">
-          <p className="text-[#ffff00] text-xs font-bold text-center">
+        {/* Status bar */}
+        <div className="bg-[#ff0000] border-2 border-black px-2 py-1 mt-2 flex flex-wrap justify-between items-center gap-1">
+
+          <p className="text-[#ffff00] text-xs font-bold">
             STATUS: {status}
           </p>
-        </div>
 
-        {/* Disclaimer */}
-        <p className="text-xs text-[#0000cc] text-center font-bold mt-3">
-          WARNING: EXCESSIVE LISTENING MAY CAUSE WRIST DAMAGE.
-        </p>
+          <p className="text-[#ffff00] text-xs font-bold">
+            MUTE ATTEMPTS: {muteClicks}
+          </p>
+
+        </div>
 
       </div>
 
       {/* Footer */}
-      <div className="text-center text-[#ffff00] text-xs font-bold mt-2">
+      <div className="text-center text-[#ffff00] text-[10px] font-bold mt-1">
         WRIST FM™ © 2006-2026 | ALL WRISTS RESERVED
-        <br />
-        MUTE ATTEMPTS: {muteClicks}
       </div>
 
     </div>
