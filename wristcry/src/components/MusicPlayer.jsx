@@ -13,6 +13,11 @@ const tracks = [
     artist: "xaviersobased",
     src: "/audio/track2.mp3",
   },
+  {
+    title: "she's an addict",
+    artist: "yuke",
+    src: "/audio/track3.mp3",
+  },
 ];
 
 function MusicPlayer() {
@@ -237,11 +242,6 @@ function MusicPlayer() {
 
         </div>
 
-      </div>
-
-      {/* Footer */}
-      <div className="text-center text-[#ffff00] text-[10px] font-bold mt-1">
-        WRIST FM™ © 2006-2026 | ALL WRISTS RESERVED
       </div>
 
     </div>
