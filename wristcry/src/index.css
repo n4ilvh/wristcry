@@ -3,6 +3,7 @@
 .background {
   background-color: #fe0000;
   @apply min-h-screen text-black p-8;
+  width: 100vw;
 }
 
 .header {
@@ -12,7 +13,6 @@
 }
 
 .music-player {
-  background-color: green;
   display: flex;
   font-size: 2rem;
 }

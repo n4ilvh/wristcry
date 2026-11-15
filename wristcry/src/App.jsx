@@ -27,11 +27,12 @@ function App() {
         <h1 className="text-5xl font-black italic">
           WRISTCRY
         </h1>
-        <div className='music-player'>
-          <MusicPlayer/>
-        </div>
       
       </header>
+
+      <div className='music-player'>
+          <MusicPlayer/>
+      </div>
 
       {/* Main content */}
       <main className="flex flex-col items-center justify-center mt-20 gap-6">
