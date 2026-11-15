@@ -297,7 +297,7 @@ export default function App() {
         <aside className="w-full lg:w-60 shrink-0 bg-white text-black p-3 z-30 font-comic flex flex-col min-h-[400px]">
           <h3 className="text-lg font-black italic pb-2 mb-2 text-center uppercase tracking-wider bg-yellow-300">
             
-            {isChinese ? "🏆 排行榜" : "🏆 Leaderboard"}
+            {isChinese ? "🏆 排行榜" : "🏆 Click Leaderboard"}
           </h3>
           <ul className="flex flex-col gap-2 font-bold text-xs flex-grow justify-around">
             {leaderboard.map((user, index) => (
