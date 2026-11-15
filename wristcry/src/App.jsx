@@ -312,10 +312,10 @@ export default function App() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center pb-12">
+        <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center pb-12 overflow-x-hidden">
         
           {/* chinese gif */}
-          <img src="../public/images/gif1.gif" className="w-56 h-20 md:w-72"/>
+          <img src="/images/gif1.gif" className="w-56 h-20 md:w-72"/>
 
           {/* Title */}
           <h2 className="text-3xl md:text-5xl font-black text-center text-yellow-300 font-comic">
