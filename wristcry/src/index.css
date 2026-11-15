@@ -1,3 +1,9 @@
 @import "tailwindcss";
 
+.background {
+  background-color: #fe0000;
+  @apply min-h-screen text-black p-8;
+}
 
+.title {
+}

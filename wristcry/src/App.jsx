@@ -17,7 +17,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="min-h-screen bg-lime-400 text-black p-8">
+    <div className="background">
 
       {/* Header */}
       <header className="flex justify-between items-center">
