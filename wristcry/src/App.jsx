@@ -90,22 +90,21 @@ export default function App() {
       setIsChinese(true);
     }
   
-  if (globalClickCountRef.current % 6 === 0) {
-    setShowCrashWarning(true);
+    if (globalClickCountRef.current % 6 === 0) {
+      setShowCrashWarning(true);
 
-      const crash = audioRef.current;
+        const crash = audioRef.current;
 
-      if (crash) {
-        crash.stop();
+        if (crash) {
+          crash.stop();
 
-      // 30% chance to play at 2x speed
-      const playLoud = Math.random() < 0.3;
+        // 30% chance to play at 2x speed
+        const playLoud = Math.random() < 0.3;
 
-      crash.volume(playLoud ? 2 : 1);
-      crash.play();
-    }
-  };
-
+        crash.volume(playLoud ? 2 : 1);
+        crash.play();
+      }
+    };
   }
 
   const handleClick = () => {
@@ -144,7 +143,7 @@ export default function App() {
       onClick={handleClick}
       className="bg-yellow-300 text-white text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-none"
     >
-      CLICK ME
+      {isChinese ? "点击我" : "CLICK ME"}
     </button>
   )
 
@@ -157,7 +156,7 @@ export default function App() {
       }}
       className="bg-yellow-300 text-red-600 text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-none"
     >
-      RESET
+      {isChinese ? "重置" : "RESET"}
     </button>
   )
 
@@ -192,7 +191,8 @@ export default function App() {
         {/* Leaderboard Sidebar */}
         <aside className="w-full lg:w-60 shrink-0 bg-white text-black p-3 z-30 font-comic flex flex-col min-h-[400px]">
           <h3 className="text-lg font-black italic pb-2 mb-2 text-center uppercase tracking-wider bg-yellow-300">
-            🏆 Leaderboard
+            
+            {isChinese ? "🏆 排行榜" : "🏆 Leaderboard"}
           </h3>
           <ul className="flex flex-col gap-2 font-bold text-xs flex-grow justify-around">
             {leaderboard.map((user, index) => (
@@ -219,17 +219,19 @@ export default function App() {
 
           {/* Info Paragraph */}
           <p className="text-sm md:text-base font-bold max-w-xl text-white font-comic leading-relaxed">
-            3-15% of software developers affected by carpal tunnel – outperforming the annual mortality rate of people crushed to death while aggressively shaking a vending machine for a stuck bag of chips by roughly 1.4 billion percent.
+            {isChinese ? "3% 到 15% 的软件开发人员患有腕管综合征——这一比例比“因用力摇晃自动售货机试图取出卡住的薯片，结果反被机器压死”的年度死亡率，高出了约 14 亿个百分点。" : "3-15% of software developers affected by carpal tunnel – outperforming the annual mortality rate of people crushed to death while aggressively shaking a vending machine for a stuck bag of chips by roughly 1.4 billion percent."}
+            
           </p>
 
           {/* Subtitle */}
           <p className="text-base md:text-lg font-bold tracking-wider text-yellow-300 font-comic max-w-xl">
-            CLICK TO RAISE AWARENESS
+            {isChinese ? "点击以提升关注度" : "CLICK TO RAISE AWARENESS"}
+            
           </p>
 
           {/* Separated Total Count Display Window */}
           <div className="flex flex-col items-center bg-white text-black px-6 py-2">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500 font-comic">your total count:</span>
+            <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500 font-comic">{isChinese ? "您的总数：" : "your total count:"}</span>
             <span className="text-2xl md:text-3xl font-black font-mono text-black font-comic">
               {getSillyCountDisplay(count)}
             </span>
@@ -249,7 +251,8 @@ export default function App() {
           <div className="flex flex-col items-center bg-white text-black px-6 py-2">
             <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500">Global Metric</span>
             <span className="text-lg md:text-xl font-black font-mono text-red-600">
-              lives saved: {livesSaved.toLocaleString()}
+              {isChinese ? "挽救的生命：" : "lives saved:"}
+               {livesSaved.toLocaleString()}
             </span>
           </div>
 
@@ -284,7 +287,8 @@ export default function App() {
             <div className="flex items-center gap-3 text-red-600 mt-4">
               <IoWarning className="text-5xl shrink-0" />
               <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-red-600 font-sans">
-                WARNING: MAKE YOUR WRISTS TAKE A BREAK!
+                {isChinese ? "警告：让你的手腕休息一下！" : "WARNING: MAKE YOUR WRISTS TAKE A BREAK!"}
+                
               </h3>
             </div>
 
@@ -294,7 +298,7 @@ export default function App() {
             </div>
 
             <p className="text-sm md:text-base font-bold leading-relaxed p-4 bg-neutral-100 text-red-600 font-sans uppercase">
-              Time for a break: Short, frequent pauses from clicking are proven to be much better for preventing muscle fatigue and repetitive strain injuries (RSIs) than taking one or two long breaks. This is a carpal tunnel awareness website, and you are actively violating wrist safety protocols.
+              {isChinese ? "该休息一下了：事实证明，在点击操作间隙进行频繁且短暂的休息，比偶尔进行一两次长时间的休息，更能有效预防肌肉疲劳和重复性劳损（RSI）。本网站旨在普及腕管综合征相关知识，而您目前的行为正违反了手腕安全防护准则。" : "Time for a break: Short, frequent pauses from clicking are proven to be much better for preventing muscle fatigue and repetitive strain injuries (RSIs) than taking one or two long breaks. This is a carpal tunnel awareness website, and you are actively violating wrist safety protocols."}
             </p>
 
             <button
@@ -304,7 +308,7 @@ export default function App() {
               }}
               className="bg-black hover:bg-neutral-800 text-white font-black font-sans py-4 px-8 text-xl uppercase tracking-wider cursor-pointer active:translate-y-1"
             >
-              I UNDERSTAND, SAVE MY WRISTS
+              {isChinese ? "我明白了，救救我的手腕吧" : "I UNDERSTAND, SAVE MY WRISTS"}
             </button>
           </div>
         </div>
@@ -357,7 +361,8 @@ export default function App() {
         rel="noopener noreferrer"
         className="fixed bottom-0 left-0 w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block transition-all z-50 truncate animate-pop"
       >
-        ORDER NOW! → <span className="font-mono text-sm underline opacity-90">https://login.web-safe.link/wTfRPX_redeem_gift.js</span>
+        {isChinese ? "立即订购！→" : "ORDER NOW! →"}
+         <span className="font-mono text-sm underline opacity-90">https://login.web-safe.link/wTfRPX_redeem_gift.js</span>
       </a>
     </div>
   )
