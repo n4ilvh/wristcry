@@ -30,8 +30,14 @@ export default function App() {
   // language switching
   const [isChinese, setIsChinese] = useState(false);
 
+  // Random number of clicks before switching to Chinese (10–39)
   const languageTriggerRef = useRef(
-    Math.floor(Math.random() * 3) + 10
+    Math.floor(Math.random() * 30) + 10
+  );
+
+  // Random number of additional clicks before switching back (10–39)
+  const englishTriggerRef = useRef(
+    Math.floor(Math.random() * 30) + 10
   );
 
   // Leaderboard state with requested names
@@ -83,11 +89,30 @@ export default function App() {
 
     globalClickCountRef.current += 1;
 
+    // Switch to Chinese
     if (
       !isChinese &&
       globalClickCountRef.current >= languageTriggerRef.current
     ) {
       setIsChinese(true);
+
+      // Set a new random threshold for switching back
+      englishTriggerRef.current =
+        globalClickCountRef.current +
+        Math.floor(Math.random() * 30) + 10;
+    }
+
+    // Switch back to English
+    else if (
+      isChinese &&
+      globalClickCountRef.current >= englishTriggerRef.current
+    ) {
+      setIsChinese(false);
+
+      // Set another random threshold for switching to Chinese
+      languageTriggerRef.current =
+        globalClickCountRef.current +
+        Math.floor(Math.random() * 30) + 10;
     }
   
     if (globalClickCountRef.current % 6 === 0) {
@@ -212,13 +237,13 @@ export default function App() {
         <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center z-10 pb-12">
 
           {/* Title */}
-          <h2 className="text-3xl md:text-5xl font-black text-center max-w-3xl text-yellow-300 font-comic">
+          <h2 className="text-3xl md:text-5xl font-black text-center text-yellow-300 font-comic">
             {isChinese ? "你的手腕正处于危险之中" : "YOUR WRISTS ARE IN DANGER."}
 
           </h2>
 
           {/* Info Paragraph */}
-          <p className="text-sm md:text-base font-bold max-w-xl text-white font-comic leading-relaxed">
+          <p className="text-sm md:text-base font-bold text-white font-comic leading-relaxed">
             {isChinese ? "3% 到 15% 的软件开发人员患有腕管综合征——这一比例比“因用力摇晃自动售货机试图取出卡住的薯片，结果反被机器压死”的年度死亡率，高出了约 14 亿个百分点。" : "3-15% of software developers affected by carpal tunnel – outperforming the annual mortality rate of people crushed to death while aggressively shaking a vending machine for a stuck bag of chips by roughly 1.4 billion percent."}
             
           </p>
