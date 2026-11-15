@@ -42,7 +42,7 @@ const currentTrack = tracks[trackIndex];
 useEffect(() => {
   const crash = new Howl({
     src: ["/audio/soundeffect.mp3"],
-    volume: 0.8,
+    volume: 1,
     html5: true,
   });
 

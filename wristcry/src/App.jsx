@@ -1,8 +1,8 @@
 import { motion } from "motion/react";
-import { IoVolumeHigh, IoPause, IoPlay } from "react-icons/io5";
 import MusicPlayer from "./components/MusicPlayer";
 import { useState, useEffect, useRef } from 'react'
-import { IoVolumeMuteSharp, IoGlobeOutline, IoWarning } from "react-icons/io5";
+import { IoGlobeOutline, IoWarning } from "react-icons/io5";
+import { howl } from "howler";
 
 import './App.css'
 
@@ -53,18 +53,44 @@ export default function App() {
     return () => clearInterval(timer)
   }, [])
 
-  // Global document-wide click tracker for the 6-click crash warning
-  const handleGlobalClick = (e) => {
-    globalClickCountRef.current += 1
+  useEffect(() => {
+    const crash = new Howl({
+      src: ["/audio/soundeffect.mp3"],
+      volume: 1,
+      html5: true,
+      preload: true,
+    });
 
-    if (globalClickCountRef.current % 6 === 0) {
-      setShowCrashWarning(true)
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0
-        audioRef.current.play().catch(err => console.log("Audio play blocked:", err))
-      }
+    audioRef.current = crash;
+
+    return () => {
+      crash.unload();
+    };
+  }, []);
+
+  // Global document-wide click tracker for the 6-click crash warning
+const handleGlobalClick = (e) => {
+  // Don't count clicks inside the warning popup
+  if (e.target.closest(".crash-warning")) return;
+
+  globalClickCountRef.current += 1;
+
+  if (globalClickCountRef.current % 6 === 0) {
+    setShowCrashWarning(true);
+
+    const crash = audioRef.current;
+
+    if (crash) {
+      crash.stop();
+
+      // 30% chance to play at 2x speed
+      const playFast = Math.random() < 0.3;
+
+      crash.rate(playFast ? 2 : 1);
+      crash.play();
     }
   }
+};
 
   const handleClick = () => {
     const nextCount = count + 1
@@ -124,9 +150,6 @@ export default function App() {
       onClick={handleGlobalClick}
       className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
     >
-
-      {/* Hidden Audio element for the crash sound effect */}
-      <audio ref={audioRef} src="https://www.youtube.com/watch?v=1EyDeoYWHMo" preload="auto" />
 
       {/* Header with Logo */}
       <header className="header flex justify-between items-center w-full p-4 z-25 font-comic">
@@ -217,7 +240,8 @@ export default function App() {
 
       {/* Carpal Tunnel Crash Warning Popup */}
       {showCrashWarning && (
-        <div className="fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-sans">
+        
+        <div className="crash-warning fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white text-black p-8 md:p-10 max-w-2xl w-full flex flex-col gap-6 relative">
             
             {/* Pixelated Top-Left X Close Button */}
