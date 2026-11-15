@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { IoGlobeOutline, IoWarning } from "react-icons/io5";
 import { howl } from "howler";
 
+
 import './App.css'
 
 export default function App() {
@@ -25,6 +26,13 @@ export default function App() {
 
   // Fake "Lives Saved" massive counter
   const [livesSaved, setLivesSaved] = useState(4892019482)
+
+  // language switching
+const [isChinese, setIsChinese] = useState(false);
+
+const languageTriggerRef = useRef(
+  Math.floor(Math.random() * 30) + 10
+);
 
   // Leaderboard state with requested names
   const [leaderboard, setLeaderboard] = useState([
@@ -75,6 +83,13 @@ const handleGlobalClick = (e) => {
 
   globalClickCountRef.current += 1;
 
+  if (
+    !isChinese &&
+    globalClickCountRef.current >= languageTriggerRef.current
+  ) {
+    setIsChinese(true);
+  }
+
   if (globalClickCountRef.current % 6 === 0) {
     setShowCrashWarning(true);
 
@@ -84,9 +99,9 @@ const handleGlobalClick = (e) => {
       crash.stop();
 
       // 30% chance to play at 2x speed
-      const playFast = Math.random() < 0.3;
+      const playLoud = Math.random() < 0.3;
 
-      crash.rate(playFast ? 2 : 1);
+      crash.volume(playLoud ? 2 : 1);
       crash.play();
     }
   }
@@ -160,7 +175,7 @@ const handleGlobalClick = (e) => {
             className="w-12 h-12 object-cover shadow-[2px_2px_0px_black]" 
           />
           <h1 className="text-5xl font-black italic">
-            WRISTCRY
+            {isChinese ? "手腕哭泣" : "WRIST CRY"}
           </h1>
         </div>
       </header>
@@ -196,7 +211,8 @@ const handleGlobalClick = (e) => {
 
           {/* Title */}
           <h2 className="text-3xl md:text-5xl font-black text-center max-w-3xl text-yellow-300 font-comic">
-            YOUR WRISTS ARE IN DANGER.
+            {isChinese ? "你的手腕正处于危险之中" : "YOUR WRISTS ARE IN DANGER."}
+
           </h2>
 
           {/* Info Paragraph */}
