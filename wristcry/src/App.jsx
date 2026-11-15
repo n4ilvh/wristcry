@@ -148,24 +148,24 @@ export default function App() {
 
   const clickBtnRef = useRef(null);
   const resetBtnRef = useRef(null);
+  const BANNER_HEIGHT = 80; // bottom "ORDER NOW" banner
+  const MARGIN = 10;
 
   const getRandomPosition = (buttonRef) => {
     const button = buttonRef.current;
-    if (!button) return { x: 100, y: 200 };
+    const width = button?.offsetWidth ?? 160;
+    const height = button?.offsetHeight ?? 60;
 
-    const width = button.offsetWidth;
-    const height = button.offsetHeight;
+    const vw = document.documentElement.clientWidth; // excludes scrollbar
+    const vh = window.innerHeight;
 
-    const minX = 10;
-    const maxX = window.innerWidth - width - 10;
-
-    // Keep buttons below the header and above the bottom banner
-    const minY = 150;
-    const maxY = window.innerHeight - height - 100;
+    const maxX = Math.max(MARGIN, vw - width - MARGIN);
+    const maxY = Math.max(MARGIN, vh - height - BANNER_HEIGHT);
+    const minY = Math.min(150, maxY); // never let minY exceed maxY
 
     return {
-      x: Math.random() * Math.max(0, maxX - minX) + minX,
-      y: Math.random() * Math.max(0, maxY - minY) + minY
+      x: Math.random() * (maxX - MARGIN) + MARGIN,
+      y: Math.random() * (maxY - minY) + minY,
     };
   };
 
@@ -216,7 +216,7 @@ export default function App() {
         top: buttonPositions.click.y,
         zIndex: 100,
       } : {}}
-      className="bg-yellow-300 text-white text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 transition-all duration-150"
+      className="bg-yellow-300 min-w-[10rem] text-white text-lg md:text-xl font-black font-comic py-3 px-6 cursor-pointer hover:bg-yellow-400 transition-all duration-150"
     >
       {isChinese ? "点击我" : "CLICK ME"}
     </button>
@@ -241,10 +241,32 @@ export default function App() {
     </button>
   );
 
+  useEffect(() => {
+  const clampToViewport = () => {
+    const fix = (pos, ref) => {
+      if (!pos || !ref.current) return pos;
+      const maxX = document.documentElement.clientWidth - ref.current.offsetWidth - MARGIN;
+      const maxY = window.innerHeight - ref.current.offsetHeight - BANNER_HEIGHT;
+      return {
+        x: Math.max(MARGIN, Math.min(pos.x, maxX)),
+        y: Math.max(MARGIN, Math.min(pos.y, maxY)),
+      };
+    };
+
+    setButtonPositions(prev => ({
+      click: fix(prev.click, clickBtnRef),
+      reset: fix(prev.reset, resetBtnRef),
+    }));
+  };
+
+  window.addEventListener("resize", clampToViewport);
+  return () => window.removeEventListener("resize", clampToViewport);
+}, []);
+
   return (
     <div 
       onClick={handleGlobalClick}
-      className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
+      className="background flex flex-col justify-between min-h-screen pb-32 relative font-comic"
     >
 
 
