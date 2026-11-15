@@ -461,8 +461,8 @@ export default function App() {
         rel="noopener noreferrer"
         className="fixed bottom-0 left-0 w-full bg-fuchsia-600 text-yellow-300 text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block z-50 truncate animate-pop outline-none border-none shadow-none ring-0 focus:outline-none"
       >
-        {isChinese ? "立即订购！→" : "ORDER NOW! →"}
-         <span className="font-mono text-sm underline opacity-90 ml-2">https://secure.hf25u.link/lottery_znUhrx_download_now.com</span>
+        {isChinese ? "立即订购！→" : "ORDER NOW! → https://login.2hanzi.com/flash_QuHK9J_money_request.mp4"}
+         <span className="font-mono text-sm underline opacity-90 ml-2">https://physiostore.ca/product-category/shop-by-injury/wrist-hand-injuries/carpal-tunnel-syndrome/carpal-tunnel-wrist-braces/?srsltid=AYCX9vLqbcAhzSBv3Yzq0APeR_CeBCTpL6i0skl7dbI08HioMKzshjrM</span>
       </a>
     </div>
   )
