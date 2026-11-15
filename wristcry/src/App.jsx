@@ -172,6 +172,10 @@ export default function App() {
         <h2 className="text-3xl md:text-5xl font-black text-center max-w-3xl text-yellow-300 font-comic">
           YOUR WRISTS ARE IN DANGER.
         </h2>
+        <div className="w-full max-w-md aspect-video overflow-hidden">
+          <img src="../public/images/image1.png" className="w-full h-full object-cover"/>
+        </div>
+        
 
         {/* Info Paragraph: Raw red background, no white box */}
         <p className="text-sm md:text-base font-bold max-w-xl text-white font-comic leading-relaxed">
