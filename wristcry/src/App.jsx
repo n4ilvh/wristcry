@@ -31,7 +31,7 @@ export default function App() {
 const [isChinese, setIsChinese] = useState(false);
 
 const languageTriggerRef = useRef(
-  Math.floor(Math.random() * 30) + 10
+  Math.floor(Math.random() * 3) + 10
 );
 
   // Leaderboard state with requested names
