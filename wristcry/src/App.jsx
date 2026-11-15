@@ -49,12 +49,12 @@ export default function App() {
   // Leaderboard state with requested names
   const [leaderboard, setLeaderboard] = useState([
     { id: 1, name: "osamason", score: 1000000 },
-    { id: 2, name: "nettspend", score: 854200 },
-    { id: 3, name: "2slimey", score: 712950 },
-    { id: 4, name: "fakemink", score: 630110 },
-    { id: 5, name: "ecco2k", score: 500025 },
-    { id: 6, name: "che", score: 410000 },
-    { id: 7, name: "homixide poopoo", score: 320000 },
+    { id: 2, name: "nettspend", score: 847293 },
+    { id: 3, name: "2slimey", score: 304928 },
+    { id: 4, name: "fakemink", score: 10784 },
+    { id: 5, name: "ecco2k", score: 1938 },
+    { id: 6, name: "che", score: 134 },
+    { id: 7, name: "homixide poopoo", score: 67 },
   ])
 
   useEffect(() => {
