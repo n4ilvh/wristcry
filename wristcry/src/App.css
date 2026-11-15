@@ -15,3 +15,15 @@
 .font-comic {
   font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
 }
+@keyframes popAnimation {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-pop {
+  animation: popAnimation 2s ease-in-out infinite;
+}

