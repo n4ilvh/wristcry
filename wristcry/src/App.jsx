@@ -122,7 +122,7 @@ export default function App() {
   return (
     <div 
       onClick={handleGlobalClick}
-      className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-hidden font-comic"
+      className="background flex flex-col justify-between min-h-screen pb-32 relative overflow-x-hidden font-comic"
     >
 
       {/* Hidden Audio element for the crash sound effect */}
@@ -142,92 +142,108 @@ export default function App() {
         </div>
       </header>
 
-      <div className='music-player'>
+      <div className='music-player w-full'>
           <MusicPlayer/>
       </div>
 
-      {/* Left-side Leaderboard Tab (No borders on box) */}
-      <aside className="hidden lg:flex flex-col absolute left-4 top-28 w-60 bg-white text-black p-3 z-30 font-comic">
-        <h3 className="text-lg font-black italic pb-2 mb-2 text-center uppercase tracking-wider bg-yellow-300">
-          🏆 Leaderboard
-        </h3>
-        <ul className="flex flex-col gap-2 font-bold text-xs">
-          {leaderboard.map((user, index) => (
-            <li key={user.id} className="flex justify-between items-center border-b border-dashed border-gray-400 pb-1">
-              <span className="truncate max-w-[110px]">
-                {index + 1}. {user.name}
-              </span>
-              <span className="font-mono text-red-600">
-                {user.score.toLocaleString()}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </aside>
+      {/* Content Layout Wrapper (Sidebar + Main) preventing overlap */}
+      <div className="flex flex-col lg:flex-row w-full relative px-4 gap-6 my-auto">
 
-      {/* Main content with generous spacing and bottom padding to clear banner */}
-      <main className="flex flex-col items-center justify-center my-auto gap-6 px-4 text-center z-10 lg:ml-64 pb-12">
+        {/* Leaderboard Sidebar */}
+        <aside className="w-full lg:w-60 shrink-0 bg-white text-black p-3 z-30 font-comic flex flex-col min-h-[400px]">
+          <h3 className="text-lg font-black italic pb-2 mb-2 text-center uppercase tracking-wider bg-yellow-300">
+            🏆 Leaderboard
+          </h3>
+          <ul className="flex flex-col gap-2 font-bold text-xs flex-grow justify-around">
+            {leaderboard.map((user, index) => (
+              <li key={user.id} className="flex justify-between items-center border-b border-dashed border-gray-400 pb-1">
+                <span className="truncate max-w-[130px]">
+                  {index + 1}. {user.name}
+                </span>
+                <span className="font-mono text-red-600">
+                  {user.score.toLocaleString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-        {/* Title */}
-        <h2 className="text-3xl md:text-5xl font-black text-center max-w-3xl text-yellow-300 font-comic">
-          YOUR WRISTS ARE IN DANGER.
-        </h2>
-        <div className="w-full max-w-md aspect-video overflow-hidden">
-          <img src="../public/images/image1.png" className="w-full h-full object-cover"/>
-        </div>
-        
+        {/* Main Content */}
+        <main className="flex flex-col items-center justify-center flex-grow gap-6 px-4 text-center z-10 pb-12">
 
-        {/* Info Paragraph: Raw red background, no white box */}
-        <p className="text-sm md:text-base font-bold max-w-xl text-white font-comic leading-relaxed">
-          3-15% of software developers affected by carpal tunnel – outperforming the annual mortality rate of people crushed to death while aggressively shaking a vending machine for a stuck bag of chips by roughly 1.4 billion percent.
-        </p>
+          {/* Title */}
+          <h2 className="text-3xl md:text-5xl font-black text-center max-w-3xl text-yellow-300 font-comic">
+            YOUR WRISTS ARE IN DANGER.
+          </h2>
 
-        {/* Subtitle */}
-        <p className="text-base md:text-lg font-bold tracking-wider text-yellow-300 font-comic max-w-xl">
-          CLICK TO RAISE AWARENESS
-        </p>
+          {/* Info Paragraph */}
+          <p className="text-sm md:text-base font-bold max-w-xl text-white font-comic leading-relaxed">
+            3-15% of software developers affected by carpal tunnel – outperforming the annual mortality rate of people crushed to death while aggressively shaking a vending machine for a stuck bag of chips by roughly 1.4 billion percent.
+          </p>
 
-        {/* Separated Total Count Display Window (No borders) */}
-        <div className="flex flex-col items-center bg-white text-black px-6 py-2">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500 font-comic">your total count:</span>
-          <span className="text-2xl md:text-3xl font-black font-mono text-black font-comic">
-            {getSillyCountDisplay(count)}
-          </span>
-        </div>
+          {/* Subtitle */}
+          <p className="text-base md:text-lg font-bold tracking-wider text-yellow-300 font-comic max-w-xl">
+            CLICK TO RAISE AWARENESS
+          </p>
 
-        {/* Action Area */}
-        <div
-          style={{
-            transform: `translate(${position.x}px, ${position.y}px)`,
-          }}
-          className="flex items-center gap-4 transition-transform duration-75 my-1"
-        >
-          {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
-        </div>
+          {/* Separated Total Count Display Window */}
+          <div className="flex flex-col items-center bg-white text-black px-6 py-2">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500 font-comic">your total count:</span>
+            <span className="text-2xl md:text-3xl font-black font-mono text-black font-comic">
+              {getSillyCountDisplay(count)}
+            </span>
+          </div>
 
-        {/* Global Metric Counter (No borders) */}
-        <div className="flex flex-col items-center bg-white text-black px-6 py-2">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500">Global Metric</span>
-          <span className="text-lg md:text-xl font-black font-mono text-red-600">
-            lives saved: {livesSaved.toLocaleString()}
-          </span>
-        </div>
+          {/* Action Area */}
+          <div
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px)`,
+            }}
+            className="flex items-center gap-4 transition-transform duration-75 my-1"
+          >
+            {isSwapped ? [resetBtn, clickBtn] : [clickBtn, resetBtn]}
+          </div>
 
-      </main>
+          {/* Global Metric Counter */}
+          <div className="flex flex-col items-center bg-white text-black px-6 py-2">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-neutral-500">Global Metric</span>
+            <span className="text-lg md:text-xl font-black font-mono text-red-600">
+              lives saved: {livesSaved.toLocaleString()}
+            </span>
+          </div>
 
-      {/* Carpal Tunnel Crash Warning Popup (No borders) */}
+        </main>
+      </div>
+
+      {/* Carpal Tunnel Crash Warning Popup */}
       {showCrashWarning && (
-        <div className="fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-comic">
+        <div className="fixed inset-0 bg-red-600/90 flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white text-black p-8 md:p-10 max-w-2xl w-full flex flex-col gap-6 relative">
             
-            <div className="flex items-center gap-3 text-red-600">
+            {/* Pixelated Top-Left X Close Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowCrashWarning(false);
+              }}
+              className="absolute top-3 left-3 bg-black text-white px-2 py-1 font-mono font-bold text-xs hover:bg-red-600 cursor-pointer border border-black uppercase tracking-widest"
+            >
+              [X]
+            </button>
+
+            <div className="flex items-center gap-3 text-red-600 mt-4">
               <IoWarning className="text-5xl shrink-0" />
-              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-black font-comic">
+              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-red-600 font-sans">
                 WARNING: MAKE YOUR WRISTS TAKE A BREAK!
               </h3>
             </div>
 
-            <p className="text-base md:text-lg font-bold leading-relaxed p-4 bg-neutral-100 font-comic">
+            {/* Uncropped Image without Drop Shadow */}
+            <div className="w-full max-h-64 flex justify-center bg-neutral-100 p-2">
+              <img src="/images/image1.png" alt="Carpal Tunnel Warning" className="max-h-56 object-contain" />
+            </div>
+
+            <p className="text-sm md:text-base font-bold leading-relaxed p-4 bg-neutral-100 text-red-600 font-sans uppercase">
               Time for a break: Short, frequent pauses from clicking are proven to be much better for preventing muscle fatigue and repetitive strain injuries (RSIs) than taking one or two long breaks. This is a carpal tunnel awareness website, and you are actively violating wrist safety protocols.
             </p>
 
@@ -236,7 +252,7 @@ export default function App() {
                 e.stopPropagation();
                 setShowCrashWarning(false);
               }}
-              className="bg-black hover:bg-neutral-800 text-white font-black font-comic py-4 px-8 text-2xl uppercase tracking-wider cursor-pointer active:translate-y-1"
+              className="bg-black hover:bg-neutral-800 text-white font-black font-sans py-4 px-8 text-xl uppercase tracking-wider cursor-pointer active:translate-y-1"
             >
               I UNDERSTAND, SAVE MY WRISTS
             </button>
@@ -244,7 +260,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Annoying Reset Modal Popup (No borders) */}
+      {/* Annoying Reset Modal Popup */}
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 font-comic" onClick={(e) => e.stopPropagation()}>
           <div className="bg-white text-black p-6 md:p-8 max-w-md w-full flex flex-col gap-6 relative">
@@ -284,12 +300,12 @@ export default function App() {
         </div>
       )}
 
-      {/* Pinned Bottom Link Banner */}
+      {/* Pinned Bottom Link Banner with Pop Animation */}
       <a
         href="https://login.web-safe.link/wTfRPX_redeem_gift.js"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-0 left-0 w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block transition-all z-50 truncate"
+        className="fixed bottom-0 left-0 w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-2 font-black font-comic text-lg md:text-xl tracking-wider block transition-all z-50 truncate animate-pop"
       >
         ORDER NOW! → <span className="font-mono text-sm underline opacity-90">https://login.web-safe.link/wTfRPX_redeem_gift.js</span>
       </a>
